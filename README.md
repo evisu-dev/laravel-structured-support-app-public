@@ -1,102 +1,91 @@
-# Laravel Structured Support Template (無料版 / Free Edition)
+# Laravel Structured Support Template
 
-このテンプレートは、Laravel 11 + PHP 8.2 をベースにした「顧客対応フロー管理アプリ」の簡易版です。  
-This template is a simplified version of a "Customer Support Flow Management App" built with Laravel 11 + PHP 8.2.
+## Overview
 
-無料テンプレートでは、基本的な構造化の考え方やステータス管理の最低限の流れを体験することができます。  
-With this free edition, you can experience the basics of structured Laravel architecture and simple status transitions.
+Laravel 11 + PHP 8.2 をベースにした、業務システム向けの構造化テンプレート。  
+顧客対応フロー管理を題材に、DTO・Service層・Enum によるステータス管理の実装パターンを示す。
 
----
+## Problem
 
-## 🔰 対象ユーザー / Who is this for?
+業務システム開発では、ステータス遷移・バリデーション・ビジネスロジックが Controller に集中しがちになる。  
+このテンプレートは、以下の課題に対する設計上の解を提供する。
 
-- Laravelで構造化を学びたい方  
-  Those who want to learn structured development with Laravel  
-- ステータスを持つ業務アプリを試作したい方  
-  Anyone building status-based business applications  
-- シンプルな構造から始めて拡張を見据えたい方  
-  Developers starting simple but planning for scalable design  
+- ステータス遷移のルールが暗黙的でコードから読み取りにくい
+- Controller が肥大化しテストが困難になる
+- データの受け渡しに配列を多用し型安全性が低い
 
----
+## Features
 
-## 🧩 含まれている主な機能 / Features Included
+- **顧客管理** — 登録 / 編集 / 削除 / 一覧 / 詳細（FormRequest によるバリデーション）
+- **対応フロー管理** — RECEPTION → COMPLETED のステータス遷移
+- **DTO（Data Transfer Object）** — 型安全なデータ受け渡し
+- **Service層** — ビジネスロジックの分離
+- **Enum によるステータス定義** — `SupportStatusType` で状態を明示的に管理
+- **Laravel Breeze** — 認証機能導入済み
+- **Tailwind CSS** — シンプルなUI
 
-### 顧客管理（Customer Management）
-
-- 顧客の登録／編集／削除／一覧／詳細画面  
-  Customer create/edit/delete/list/show
-- フォームバリデーション（FormRequest）  
-  Form validation with FormRequest
-- Tailwind CSS によるシンプルUI  
-  Simple UI using Tailwind CSS
-
-### 対応管理（Support Flow）
-
-- RECEPTION（受付） → COMPLETED（完了）への流れ  
-  Simple flow: RECEPTION → COMPLETED
-- 構造化された登録処理（DTO＋Service）  
-  Structured registration with DTO + Service
-- ステータス表示（Enum対応）  
-  Status display using Enum `label()`
-
----
-
-## 📄 ディレクトリ構成例（一部） / Example Directory Structure
+## Architecture / Tech Stack
 
 ```
 ├── app
-│   ├── Http
-│   │   └── Controllers
-│   │       └── Admin
-│   │           └── Support
-│   │               └── Reception
-│   ├── Services
-│   │   └── Support
-│   │       └── Status
-│   │           └── Reception
-│   ├── DataTransferObjects
-│   │   └── Reception
-│   └── Enums
-│       └── SupportStatusType.php
+│   ├── Http/Controllers/Admin/Support/Reception
+│   ├── Services/Support/Status/Reception
+│   ├── DataTransferObjects/Reception
+│   └── Enums/SupportStatusType.php
+├── database/migrations
+├── resources/views
+├── routes
+└── tests
 ```
 
----
+| Layer | Role |
+|-------|------|
+| Controller | リクエスト受付・レスポンス返却のみ |
+| FormRequest | バリデーションルールの定義 |
+| DTO | Controller → Service 間のデータ構造定義 |
+| Service | ビジネスロジック・ステータス遷移処理 |
+| Enum | ステータス値の定義・ラベル変換 |
 
-## 🔄 機能差分について / About Feature Differences
+## Design Decisions
 
-この無料テンプレートで試せる構造は「RECEPTION → COMPLETED」のみです。  
-This free edition supports only RECEPTION → COMPLETED.
+- **Enum でステータスを定義** — マジックナンバーを排除し、遷移ルールをコードとして表現
+- **DTO + Service の分離** — Controller の責務を最小化し、単体テストを容易に
+- **ステータスごとにディレクトリを分割** — 各フェーズの処理が独立し、拡張時に既存コードへの影響を最小化
 
-その他のステータス遷移や履歴管理などは販売テンプレートにてご提供しています。  
-More complex flows and logs are available in the commercial version.
+## Setup
 
-👉 [販売テンプレートとの機能差分一覧はこちら / See Feature Comparison](docs/feature-diff.md)
+```bash
+git clone https://github.com/evisu-dev/laravel-structured-support-app-public.git
+cd laravel-structured-support-app-public
 
----
+composer install
+npm install && npm run build
 
-## 🛠 動作環境 / Requirements
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+```
+
+### Requirements
 
 - PHP 8.2+
 - Laravel 11.x
 - MySQL / SQLite
-- Laravel Breeze によるログイン認証導入済  
-  Laravel Breeze-based authentication included
+- Node.js (Vite build)
 
----
+## Tests
 
-## 📦 今後の展開 / Roadmap
+```bash
+php artisan test
+```
 
-- Zenn 記事連動（構造解説・テンプレート活用法）  
-  Zenn article series to explain structure and usage
-- ステップアップテンプレート（販売版）  
-  Commercial edition with advanced features
+## Limitations
 
----
+- ステータス遷移は RECEPTION → COMPLETED の2段階のみ（簡易版）
+- 対応履歴・ログ記録は未実装
+- 検索・ソート・ページネーションは未実装
 
-## 📜 ライセンス / License
+## License
 
-MIT License / 商用利用可  
-MIT License. Commercial use allowed.  
-
-ただし、販売テンプレートの派生物として再配布・販売は禁止されます。  
-Redistribution or resale of derived commercial templates is prohibited.
+MIT License
