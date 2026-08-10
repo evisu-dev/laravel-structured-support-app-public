@@ -1,8 +1,18 @@
 # Laravel Structured Support Template
 
+> **Maintenance Note**
+>
+> 本リポジトリはLaravel 11で作成したアーキテクチャサンプルです。  
+> Laravel 11はセキュリティサポート終了済みのため、新規本番システムのスターターとしての利用は推奨しません。  
+> 設計パターン（DTO / Service / Enum）の参考としてご利用ください。
+>
+> This repository was built with Laravel 11 as an architecture sample.  
+> Laravel 11 has reached end of security support.  
+> For new production projects, use a currently supported Laravel version.
+
 ## Overview
 
-Laravel 11 + PHP 8.2 をベースにした、業務システム向けの構造化テンプレート。  
+業務システム向けの構造化設計サンプル。  
 顧客対応フロー管理を題材に、DTO・Service層・Enum によるステータス管理の実装パターンを示す。
 
 ## Problem
