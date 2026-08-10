@@ -98,4 +98,4 @@ php artisan test
 
 ## License
 
-MIT License
+MIT License. See `LICENSE`.
